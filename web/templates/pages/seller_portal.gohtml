@@ -1,0 +1,124 @@
+{{define "portal_content"}}
+
+<div class="space-y-8">
+
+    <!-- Stats Header -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white rounded-xl border border-surface-200 p-5 text-center hover:shadow-md transition-shadow">
+            <p class="text-xs text-surface-400 font-body uppercase tracking-wide">Total Sales</p>
+            <p class="text-2xl font-display font-bold text-surface-900 mt-1">{{printf "%.0f" .SellerData.TotalSales}}</p>
+        </div>
+        <div class="bg-white rounded-xl border border-surface-200 p-5 text-center hover:shadow-md transition-shadow">
+            <p class="text-xs text-surface-400 font-body uppercase tracking-wide">Profit</p>
+            <p class="text-2xl font-display font-bold text-emerald-600 mt-1">{{printf "%.0f" .SellerData.EstimatedProfit}}</p>
+        </div>
+        <div class="bg-white rounded-xl border border-surface-200 p-5 text-center hover:shadow-md transition-shadow">
+            <p class="text-xs text-surface-400 font-body uppercase tracking-wide">Orders</p>
+            <p class="text-2xl font-display font-bold text-surface-900 mt-1">{{.SellerData.TotalOrders}}</p>
+        </div>
+        <div class="bg-white rounded-xl border border-surface-200 p-5 text-center hover:shadow-md transition-shadow {{if gt .SellerData.LowStockCount 0}}ring-2 ring-amber-200{{end}}">
+            <p class="text-xs text-surface-400 font-body uppercase tracking-wide">Low Stock Alerts</p>
+            <p class="text-2xl font-display font-bold text-amber-600 mt-1">{{.SellerData.LowStockCount}}</p>
+        </div>
+    </div>
+
+    <!-- Low Stock Alerts -->
+    {{if .SellerData.LowStockProducts}}
+    <div class="bg-white rounded-xl border border-amber-100 shadow-sm overflow-hidden">
+        <div class="flex items-center gap-3 px-6 py-4 border-b border-amber-100 bg-amber-50">
+            <div class="w-7 h-7 rounded-lg bg-amber-100 flex items-center justify-center">
+                <svg class="w-3.5 h-3.5 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-2 0-2 .833l-.732.833"/>
+                </svg>
+            </div>
+            <h2 class="font-display font-bold text-sm text-amber-800">Low Stock Alerts (≤5 units)</h2>
+        </div>
+        <div class="divide-y divide-surface-100">
+            {{range .SellerData.LowStockProducts}}
+            <div class="flex items-center gap-4 px-6 py-4 hover:bg-amber-50 transition-colors">
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-semibold text-surface-900 truncate">{{.Name}}</p>
+                    <p class="text-xs text-surface-500">Stall #{{.StallID}}</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-sm font-semibold text-surface-900">{{.Stock}} left</p>
+                    <p class="text-xs text-amber-600 font-medium">{{printf "%.0f" .Price}}</p>
+                </div>
+            </div>
+            {{end}}
+        </div>
+    </div>
+    {{end}}
+
+    <!-- Stalls & Products -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        <!-- My Stalls -->
+        <div class="bg-white rounded-xl border border-surface-200 shadow-sm overflow-hidden">
+            <div class="flex items-center gap-3 px-6 py-4 border-b border-surface-100">
+                <div class="w-7 h-7 rounded-lg bg-emerald-100 flex items-center justify-center">
+                    <svg class="w-3.5 h-3.5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m-1 4h1m-1 -8H5m0 0v8m0 -8h14l-5 5"/>
+                    </svg>
+                </div>
+                <h2 class="font-display font-bold text-sm text-surface-800">My Stalls ({{len .SellerData.Stalls}})</h2>
+            </div>
+            {{if .SellerData.Stalls}}
+            <ul class="divide-y divide-surface-100">
+                {{range .SellerData.Stalls}}
+                <li class="px-6 py-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="font-semibold text-sm">{{.Name}}</p>
+{{title .Status}}
+                        </div>
+                        <a href="/seller/products/add?stall={{.StallID}}" class="text-xs font-semibold text-emerald-600 hover:text-emerald-700">
+                            Add Product →
+                        </a>
+                    </div>
+                </li>
+                {{end}}
+            </ul>
+            {{else}}
+            <div class="p-8 text-center">
+                <form method="POST" action="/seller/stalls" class="max-w-sm mx-auto space-y-3">
+                    <div>
+                        <input type="text" name="stall_name" placeholder="My First Stall" required class="w-full px-3 py-2 border border-surface-200 rounded-lg text-sm">
+                    </div>
+                    <button type="submit" class="w-full bg-emerald-500 text-white py-2 rounded-lg font-semibold text-sm hover:bg-emerald-600 transition">
+                        Request New Stall
+                    </button>
+                </form>
+            </div>
+            {{end}}
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="bg-white rounded-xl border border-surface-200 shadow-sm p-6 space-y-4">
+            <h3 class="font-display font-bold text-sm text-surface-800 uppercase tracking-wide">Recent Activity</h3>
+            <div class="space-y-2 text-sm">
+                <div class="flex justify-between">
+                    <span class="text-surface-500">Total Orders</span>
+                    <span class="font-semibold">{{.SellerData.TotalOrders}}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-surface-500">Active Stalls</span>
+                    <span class="font-semibold">{{range .SellerData.Stalls}}{{if eq .Status "active"}}1{{end}}{{end}}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-surface-500">Low Stock Items</span>
+                    <span class="font-semibold text-amber-600">{{.SellerData.LowStockCount}}</span>
+                </div>
+            </div>
+            <div class="pt-4 border-t border-surface-100">
+                <a href="/seller/low-stock" class="text-xs font-semibold text-brand-600 hover:text-brand-700 block">
+                    View Low Stock →
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+{{end}}

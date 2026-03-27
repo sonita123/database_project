@@ -1,0 +1,101 @@
+{{define "portal_content"}}
+
+    <div class="max-w-xl mx-auto space-y-6">
+
+        <div class="flex items-center gap-3">
+            <a href="/portal/addresses"
+               class="w-8 h-8 rounded-lg flex items-center justify-center text-surface-400 hover:bg-surface-100 hover:text-surface-700 transition-colors">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+                </svg>
+            </a>
+            <div>
+                <h1 class="font-display text-2xl font-bold text-surface-900 tracking-tight">{{.Title}}</h1>
+                <p class="text-sm text-surface-400 font-body mt-0.5">
+                    {{if .Address.AddressID}}Update your delivery address{{else}}Save a new delivery address{{end}}
+                </p>
+            </div>
+        </div>
+
+        {{if .Error}}
+            <div class="bg-red-50 border border-red-200 rounded-xl px-5 py-3 flex items-center gap-3">
+                <svg class="w-4 h-4 text-red-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <p class="text-sm font-body text-red-700">{{.Error}}</p>
+            </div>
+        {{end}}
+
+        <div class="bg-white rounded-xl border border-surface-200 shadow-sm overflow-hidden">
+            <div class="px-6 py-4 border-b border-surface-100">
+                <h2 class="font-display font-bold text-sm text-surface-800">Address Details</h2>
+            </div>
+
+            {{if .Address.AddressID}}
+            <form method="POST" action="/portal/addresses/{{.Address.AddressID}}/edit" class="px-6 py-6 space-y-5">
+                {{else}}
+                <form method="POST" action="/portal/addresses/add" class="px-6 py-6 space-y-5">
+                    {{if .Next}}<input type="hidden" name="next" value="{{.Next}}">{{end}}
+                    {{end}}
+
+                    <!-- Street -->
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-display font-semibold uppercase tracking-wider text-surface-500">
+                            Street Address <span class="text-red-400">*</span>
+                        </label>
+                        <input type="text" name="street" required
+                               value="{{.Address.Street}}"
+                               placeholder="e.g. 123 University Ave"
+                               class="w-full px-3 py-2.5 text-sm font-body bg-surface-50 border border-surface-200 rounded-lg text-surface-800 placeholder-surface-400 focus:outline-none focus:ring-2 focus:ring-brand-400 focus:border-transparent transition"/>
+                    </div>
+
+                    <!-- City -->
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-display font-semibold uppercase tracking-wider text-surface-500">
+                            City <span class="text-red-400">*</span>
+                        </label>
+                        <input type="text" name="city" required
+                               value="{{.Address.City}}"
+                               placeholder="e.g. Kabul"
+                               class="w-full px-3 py-2.5 text-sm font-body bg-surface-50 border border-surface-200 rounded-lg text-surface-800 placeholder-surface-400 focus:outline-none focus:ring-2 focus:ring-brand-400 focus:border-transparent transition"/>
+                    </div>
+
+                    <!-- Postal Code -->
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-display font-semibold uppercase tracking-wider text-surface-500">
+                            Postal Code <span class="text-surface-300 font-normal normal-case">(optional)</span>
+                        </label>
+                        <input type="text" name="postal_code"
+                               value="{{.Address.PostalCode}}"
+                               placeholder="e.g. 1001"
+                               class="w-full px-3 py-2.5 text-sm font-body bg-surface-50 border border-surface-200 rounded-lg text-surface-800 placeholder-surface-400 focus:outline-none focus:ring-2 focus:ring-brand-400 focus:border-transparent transition"/>
+                    </div>
+
+                    <!-- Default checkbox -->
+                    <label class="flex items-center gap-3 cursor-pointer">
+                        <input type="checkbox" name="is_default"
+                               {{if .Address.IsDefault}}checked{{end}}
+                               class="w-4 h-4 rounded accent-orange-500">
+                        <span class="text-sm font-body text-surface-700">Set as my default address</span>
+                    </label>
+
+                    <div class="border-t border-surface-100 pt-4 flex items-center justify-between">
+                        <a href="/portal/addresses"
+                           class="px-4 py-2.5 rounded-lg border border-surface-200 text-sm font-display font-semibold text-surface-600 hover:bg-surface-50 transition-colors">
+                            Cancel
+                        </a>
+                        <button type="submit"
+                                class="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-brand-500 hover:bg-brand-600 text-white text-sm font-display font-semibold shadow-sm transition-all">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            {{if .Address.AddressID}}Save Changes{{else}}Save Address{{end}}
+                        </button>
+                    </div>
+
+                </form>
+        </div>
+
+    </div>
+
+{{end}}

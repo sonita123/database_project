@@ -1,0 +1,26 @@
+{
+  "name": "unibazar_project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:css":  "npx @tailwindcss/cli -i ./web/static/css/input.css -o ./web/static/css/app.css --minify",
+    "watch:css":  "npx @tailwindcss/cli -i ./web/static/css/input.css -o ./web/static/css/app.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elyasahmadi2022/unibazar-go-sql-server-project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/elyasahmadi2022/unibazar-go-sql-server-project/issues"
+  },
+  "homepage": "https://github.com/elyasahmadi2022/unibazar-go-sql-server-project#readme",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.2.2",
+    "tailwindcss": "^4.2.2"
+  }
+}

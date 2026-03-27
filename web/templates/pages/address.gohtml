@@ -1,0 +1,89 @@
+{{define "portal_content"}}
+
+    <div class="max-w-2xl mx-auto space-y-6">
+
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="font-display text-2xl font-bold text-surface-900 tracking-tight">My Addresses</h1>
+                <p class="text-sm text-surface-400 font-body mt-0.5">Manage your saved delivery addresses</p>
+            </div>
+            <a href="/portal/addresses/add"
+               class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-brand-500 hover:bg-brand-600 text-white text-xs font-display font-semibold transition-colors">
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                </svg>
+                Add Address
+            </a>
+        </div>
+
+        {{if not .Addresses}}
+            <div class="bg-white rounded-xl border border-surface-200 shadow-sm py-16 text-center space-y-3">
+                <div class="w-12 h-12 rounded-xl bg-surface-100 flex items-center justify-center mx-auto">
+                    <svg class="w-6 h-6 text-surface-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                </div>
+                <p class="text-sm font-display font-semibold text-surface-500">No addresses saved</p>
+                <p class="text-xs text-surface-400 font-body">Add an address to use during checkout</p>
+                <a href="/portal/addresses/add"
+                   class="inline-flex items-center gap-2 mt-2 px-4 py-2 rounded-lg bg-brand-500 hover:bg-brand-600 text-white text-xs font-display font-semibold transition-colors">
+                    Add Your First Address
+                </a>
+            </div>
+        {{else}}
+            <div class="space-y-3">
+                {{range .Addresses}}
+                    <div class="bg-white rounded-xl border {{if .IsDefault}}border-brand-200{{else}}border-surface-200{{end}} shadow-sm px-6 py-5">
+                        <div class="flex items-start justify-between gap-4">
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <p class="font-display font-bold text-sm text-surface-900">{{.Street}}</p>
+                                    {{if .IsDefault}}
+                                        <span class="text-xs font-display font-semibold bg-brand-100 text-brand-600 px-2 py-0.5 rounded-full">Default</span>
+                                    {{end}}
+                                </div>
+                                <p class="text-sm text-surface-500 font-body mt-0.5">
+                                    {{.City}}{{if .PostalCode}}, {{.PostalCode}}{{end}}
+                                </p>
+                            </div>
+
+                            <div class="flex items-center gap-1 shrink-0">
+                                {{if not .IsDefault}}
+                                    <form method="POST" action="/portal/addresses/{{.AddressID}}/default">
+                                        <button type="submit"
+                                                class="px-3 py-1.5 rounded-lg text-xs font-display font-semibold text-surface-500 border border-surface-200 hover:bg-surface-50 transition-colors"
+                                                title="Set as default">
+                                            Set Default
+                                        </button>
+                                    </form>
+                                {{end}}
+
+                                <a href="/portal/addresses/{{.AddressID}}/edit"
+                                   class="w-7 h-7 rounded-lg flex items-center justify-center text-surface-400 hover:text-brand-500 hover:bg-brand-50 transition-colors"
+                                   title="Edit">
+                                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                    </svg>
+                                </a>
+
+                                <form method="POST" action="/portal/addresses/{{.AddressID}}/delete"
+                                      onsubmit="return confirm('Delete this address?')">
+                                    <button type="submit"
+                                            class="w-7 h-7 rounded-lg flex items-center justify-center text-surface-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+                                            title="Delete">
+                                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4h6v3M3 7h18"/>
+                                        </svg>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {{end}}
+            </div>
+        {{end}}
+
+    </div>
+
+{{end}}

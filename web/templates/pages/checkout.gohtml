@@ -1,0 +1,202 @@
+{{define "portal_content"}}
+
+    <div class="max-w-2xl mx-auto space-y-6">
+
+        <div>
+            <h1 class="font-display text-2xl font-bold text-surface-900 tracking-tight">Checkout</h1>
+            <p class="text-sm text-surface-400 font-body mt-0.5">Review your order and complete your purchase</p>
+        </div>
+
+        <!-- Balance error -->
+        {{if .BalanceError}}
+            <div class="bg-red-50 border border-red-200 rounded-xl px-5 py-4 flex items-start gap-3">
+                <svg class="w-5 h-5 text-red-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <div>
+                    <p class="text-sm font-display font-semibold text-red-800">Insufficient Balance</p>
+                    <p class="text-xs font-body text-red-600 mt-0.5">{{.BalanceError}}</p>
+                    <a href="/portal" class="inline-block mt-2 text-xs font-display font-semibold text-red-700 underline">Go to my account to check balance</a>
+                </div>
+            </div>
+        {{end}}
+
+        <form method="POST" action="/portal/checkout" class="space-y-6">
+
+            <!-- Order summary -->
+            <div class="bg-white rounded-xl border border-surface-200 shadow-sm overflow-hidden">
+                <div class="px-6 py-4 border-b border-surface-100 flex items-center gap-3">
+                    <div class="w-7 h-7 rounded-lg bg-brand-100 flex items-center justify-center shrink-0">
+                        <svg class="w-3.5 h-3.5 text-brand-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                        </svg>
+                    </div>
+                    <h2 class="font-display font-bold text-sm text-surface-800">Order Summary</h2>
+                </div>
+                <div class="divide-y divide-surface-100">
+                    {{range .Items}}
+                        <div class="flex items-center justify-between px-6 py-3 gap-4">
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-body font-medium text-surface-800 truncate">{{.ProductName}}</p>
+                                <p class="text-xs text-surface-400 font-body mt-0.5">{{printf "%.0f" .ProductPrice}} × {{.Quantity}}</p>
+                            </div>
+                            <p class="font-display font-bold text-sm text-surface-900 shrink-0">
+                                {{printf "%.0f" (mul .ProductPrice .Quantity)}}
+                            </p>
+                        </div>
+                    {{end}}
+                </div>
+
+                <!-- Totals -->
+                <div class="px-6 pt-3 pb-4 border-t border-surface-100 space-y-2 bg-surface-50">
+                    <div class="flex items-center justify-between text-sm font-body text-surface-500">
+                        <span>Subtotal</span>
+                        <span class="font-semibold text-surface-700">{{printf "%.0f" .Total}}</span>
+                    </div>
+
+                    {{if .FinalTotal}}
+                        {{if ne .FinalTotal .Total}}
+                            <!-- Discount row — subf does float64 subtraction, printf "%.0f" works correctly -->
+                            <div class="flex items-center justify-between text-sm font-body">
+                                <span class="text-emerald-600">Discount applied</span>
+                                <span class="text-emerald-600 font-semibold">− {{printf "%.0f" (subf .Total .FinalTotal)}}</span>
+                            </div>
+                            <div class="flex items-center justify-between font-display font-bold text-surface-900 text-base pt-1 border-t border-surface-200">
+                                <span>Total</span>
+                                <span>{{printf "%.0f" .FinalTotal}}</span>
+                            </div>
+                        {{else}}
+                            <div class="flex items-center justify-between font-display font-bold text-surface-900 text-base pt-1 border-t border-surface-200">
+                                <span>Total</span>
+                                <span>{{printf "%.0f" .Total}}</span>
+                            </div>
+                        {{end}}
+                    {{else}}
+                        <div class="flex items-center justify-between font-display font-bold text-surface-900 text-base pt-1 border-t border-surface-200">
+                            <span>Total</span>
+                            <span>{{printf "%.0f" .Total}}</span>
+                        </div>
+                    {{end}}
+
+                    <!-- Balance indicator -->
+                    <div class="flex items-center justify-between text-xs font-body pt-1
+                        {{if lt .Balance .Total}}text-red-500{{else}}text-emerald-600{{end}}">
+                        <span>Your balance</span>
+                        <span class="font-semibold">{{printf "%.0f" .Balance}}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Discount code -->
+            <div class="bg-white rounded-xl border border-surface-200 shadow-sm overflow-hidden">
+                <div class="px-6 py-4 border-b border-surface-100 flex items-center gap-3">
+                    <div class="w-7 h-7 rounded-lg bg-amber-100 flex items-center justify-center shrink-0">
+                        <svg class="w-3.5 h-3.5 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z"/>
+                        </svg>
+                    </div>
+                    <h2 class="font-display font-bold text-sm text-surface-800">Discount Code</h2>
+                    <span class="ml-auto text-xs text-surface-400 font-body">Optional</span>
+                </div>
+                <div class="px-6 py-4 space-y-2">
+                    {{if .DiscountError}}
+                        <p class="text-xs font-body text-red-600 flex items-center gap-1">
+                            <svg class="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                            {{.DiscountError}}
+                        </p>
+                    {{end}}
+                    <div class="flex items-center gap-2">
+                        <input type="text" name="discount_code"
+                               value="{{.DiscountCode}}"
+                               placeholder="Enter discount code"
+                               class="flex-1 px-3 py-2.5 text-sm font-body bg-surface-50 border
+                               {{if .DiscountError}}border-red-300{{else}}border-surface-200{{end}}
+                               rounded-lg text-surface-800 placeholder-surface-400 font-mono uppercase
+                               tracking-wider focus:outline-none focus:ring-2 focus:ring-brand-400
+                               focus:border-transparent transition"/>
+                        <button type="submit" name="preview" value="1"
+                                class="px-4 py-2.5 rounded-lg bg-surface-100 hover:bg-surface-200 text-surface-700 text-xs font-display font-semibold transition-colors shrink-0">
+                            Apply
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Delivery address -->
+            <div class="bg-white rounded-xl border border-surface-200 shadow-sm overflow-hidden">
+                <div class="px-6 py-4 border-b border-surface-100 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-7 h-7 rounded-lg bg-emerald-100 flex items-center justify-center shrink-0">
+                            <svg class="w-3.5 h-3.5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                        </div>
+                        <h2 class="font-display font-bold text-sm text-surface-800">Delivery Address <span class="text-red-400">*</span></h2>
+                    </div>
+                    <a href="/portal/addresses/add?next=/portal/checkout"
+                       class="inline-flex items-center gap-1.5 text-xs font-display font-semibold text-brand-500 hover:text-brand-600 transition-colors">
+                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                        </svg>
+                        Add New
+                    </a>
+                </div>
+
+                {{if not .Addresses}}
+                    <div class="px-6 py-8 text-center space-y-3">
+                        <p class="text-sm text-surface-400 font-body">No address saved — you need one to place an order</p>
+                        <a href="/portal/addresses/add?next=/portal/checkout"
+                           class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-display font-semibold transition-colors">
+                            Add a Delivery Address
+                        </a>
+                    </div>
+                {{else}}
+                    <div class="px-4 py-3 space-y-1">
+                        {{range .Addresses}}
+                            <label class="flex items-start gap-4 px-3 py-3 rounded-xl cursor-pointer hover:bg-surface-50 transition-colors">
+                                <input type="radio" name="address_id" value="{{.AddressID}}"
+                                       {{if .IsDefault}}checked{{end}} required
+                                       class="mt-0.5 accent-orange-500 shrink-0">
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center gap-2 flex-wrap">
+                                        <p class="text-sm font-body font-semibold text-surface-800">{{.Street}}</p>
+                                        {{if .IsDefault}}
+                                            <span class="text-xs font-display font-semibold bg-brand-100 text-brand-600 px-1.5 py-0.5 rounded-full">Default</span>
+                                        {{end}}
+                                    </div>
+                                    <p class="text-xs text-surface-500 font-body mt-0.5">
+                                        {{.City}}{{if .PostalCode}}, {{.PostalCode}}{{end}}
+                                    </p>
+                                </div>
+                                <a href="/portal/addresses/{{.AddressID}}/edit"
+                                   class="text-xs text-surface-400 hover:text-brand-500 font-body transition-colors shrink-0 mt-0.5"
+                                   onclick="event.stopPropagation()">Edit</a>
+                            </label>
+                        {{end}}
+                    </div>
+                {{end}}
+            </div>
+
+            <!-- Place order -->
+            {{if .Addresses}}
+                <button type="submit"
+                        class="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-display font-bold text-base shadow-sm transition-all">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    Place Order
+                </button>
+            {{else}}
+                <button type="button" disabled
+                        class="w-full px-6 py-3.5 rounded-xl bg-surface-200 text-surface-400 font-display font-bold text-base cursor-not-allowed">
+                    Add a delivery address to continue
+                </button>
+            {{end}}
+
+        </form>
+    </div>
+
+{{end}}

@@ -1,0 +1,67 @@
+{{define "portal_content"}}
+    <div class="max-w-xl mx-auto space-y-6">
+
+        <div>
+            <h1 class="font-display text-2xl font-bold text-surface-900 tracking-tight">Become a Seller</h1>
+            <p class="text-sm text-surface-400 font-body mt-0.5">Submit a request to open a stall on UniBazar</p>
+        </div>
+
+        {{if .IsSeller}}
+            <div class="bg-emerald-50 border border-emerald-200 rounded-xl px-6 py-5 flex items-center gap-4">
+                <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
+                    <svg class="w-5 h-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                    </svg>
+                </div>
+                <div>
+                    <p class="font-display font-bold text-sm text-emerald-800">You are already a seller!</p>
+                    <p class="text-xs text-emerald-600 font-body mt-0.5">You can now open a stall from your account.</p>
+                </div>
+                <a href="/portal/stall/create" class="ml-auto px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-display font-semibold transition-colors shrink-0">
+                    Open a Stall
+                </a>
+            </div>
+
+        {{else if .HasPending}}
+            <div class="bg-amber-50 border border-amber-200 rounded-xl px-6 py-5 flex items-center gap-4">
+                <div class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
+                    <svg class="w-5 h-5 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+                <div>
+                    <p class="font-display font-bold text-sm text-amber-800">Request pending review</p>
+                    <p class="text-xs text-amber-600 font-body mt-0.5">A supporter will review your request soon.</p>
+                </div>
+            </div>
+
+        {{else}}
+            <div class="bg-white rounded-xl border border-surface-200 shadow-sm overflow-hidden">
+                <div class="px-6 py-4 border-b border-surface-100">
+                    <h2 class="font-display font-bold text-sm text-surface-800">Seller Request</h2>
+                    <p class="text-xs text-surface-400 font-body mt-0.5">Tell us a bit about what you plan to sell</p>
+                </div>
+                <form method="POST" action="/portal/become-seller" class="px-6 py-6 space-y-5">
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-display font-semibold uppercase tracking-wider text-surface-500">
+                            Description <span class="text-surface-300 font-normal normal-case">(optional)</span>
+                        </label>
+                        <textarea name="description" rows="4" placeholder="Describe what you plan to sell on UniBazar..."
+                                  class="w-full px-3 py-2.5 text-sm font-body bg-surface-50 border border-surface-200 rounded-lg text-surface-800 placeholder-surface-400 focus:outline-none focus:ring-2 focus:ring-brand-400 focus:border-transparent transition resize-none"></textarea>
+                    </div>
+                    <div class="border-t border-surface-100"></div>
+                    <div class="flex items-center justify-between">
+                        <a href="/portal" class="px-4 py-2.5 rounded-lg border border-surface-200 text-sm font-display font-semibold text-surface-600 hover:bg-surface-50 transition-colors">Cancel</a>
+                        <button type="submit" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-brand-500 hover:bg-brand-600 text-white text-sm font-display font-semibold shadow-sm transition-all">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                            </svg>
+                            Submit Request
+                        </button>
+                    </div>
+                </form>
+            </div>
+        {{end}}
+
+    </div>
+{{end}}

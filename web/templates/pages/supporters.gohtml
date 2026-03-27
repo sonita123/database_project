@@ -1,0 +1,215 @@
+{{define "content"}}
+
+    <div class="space-y-6">
+
+        <!-- Page Header -->
+        <div class="relative bg-surface-900 rounded-2xl overflow-hidden">
+            <div class="absolute inset-0"
+                 style="background-image: radial-gradient(ellipse at 10% 50%, rgba(139,92,246,0.2) 0%, transparent 60%), radial-gradient(ellipse at 90% 20%, rgba(167,139,250,0.12) 0%, transparent 55%);">
+            </div>
+            <div class="absolute inset-0 opacity-[0.04]"
+                 style="background-image: linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px); background-size: 32px 32px;">
+            </div>
+            <div class="relative px-8 py-8 flex items-center justify-between">
+                <div>
+                    <p class="text-violet-400 text-xs font-display font-semibold uppercase tracking-widest mb-2">Support Team</p>
+                    <h1 class="font-display text-3xl font-extrabold text-white tracking-tight">Supporters</h1>
+                    <p class="text-surface-400 text-sm font-body mt-1.5">Manage and monitor all support staff on UniBazar.</p>
+                </div>
+                <div class="hidden lg:flex items-center gap-3">
+                    <span class="text-sm font-display font-bold text-white bg-violet-500/20 border border-violet-500/30 px-4 py-2 rounded-xl">
+                        {{.TotalSupporters}} Total
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Supporters Table -->
+        <div class="bg-white rounded-xl border border-surface-200 shadow-sm overflow-hidden">
+
+            <!-- Table header -->
+            <div class="flex items-center justify-between px-6 py-4 border-b border-surface-100">
+                <div class="flex items-center gap-3">
+                    <div class="w-7 h-7 rounded-lg bg-violet-100 flex items-center justify-center">
+                        <svg class="w-3.5 h-3.5 text-violet-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.5l1.318-1.182a4.5 4.5 0 016.364 6.364L12 20.364l-7.682-7.682a4.5 4.5 0 010-6.364z"/>
+                        </svg>
+                    </div>
+                    <h2 class="font-display font-bold text-sm text-surface-800">All Supporters</h2>
+                </div>
+                <a href="/supporters/create"
+                   class="flex items-center gap-2 px-4 py-2 rounded-lg bg-violet-500 hover:bg-violet-600 text-white text-xs font-display font-semibold transition-colors">
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    Add Supporter
+                </a>
+            </div>
+
+            <!-- Column headings -->
+            <div class="hidden md:grid grid-cols-12 gap-4 px-6 py-3 bg-surface-50 border-b border-surface-100 text-[11px] font-display font-semibold uppercase tracking-wider text-surface-400">
+                <div class="col-span-1">#</div>
+                <div class="col-span-5">Supporter</div>
+                <div class="col-span-3">Email</div>
+                <div class="col-span-3 text-right">Actions</div>
+            </div>
+
+            <!-- Rows -->
+            <div class="divide-y divide-surface-100">
+                {{range .Supporters}}
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-4 px-6 py-4 hover:bg-surface-50 transition-colors items-center">
+
+                        <!-- ID -->
+                        <div class="col-span-1 text-xs font-body text-surface-400 tabular-nums">
+                            #{{.SupporterID}}
+                        </div>
+
+                        <!-- Avatar + Name -->
+                        <div class="col-span-5 flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-full bg-violet-100 flex items-center justify-center shrink-0 overflow-hidden">
+                                {{if .ImageURL}}
+                                    <img src="{{.ImageURL}}" alt="{{.FirstName}}" class="w-9 h-9 rounded-full object-cover">
+                                {{else}}
+                                    <span class="text-violet-600 text-sm font-display font-bold select-none">{{slice .FirstName 0 1}}</span>
+                                {{end}}
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-sm font-body font-medium text-surface-800 truncate">
+                                    {{.FirstName}} {{.LastName}}
+                                </p>
+                                {{if .Password}}
+                                    <span class="inline-flex items-center gap-1 text-[10px] font-display font-semibold text-emerald-600 mt-0.5">
+                                        <svg class="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                        </svg>
+                                        Password set
+                                    </span>
+                                {{else}}
+                                    <span class="inline-flex items-center gap-1 text-[10px] font-display font-semibold text-amber-500 mt-0.5">
+                                        <svg class="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+                                        </svg>
+                                        No password
+                                    </span>
+                                {{end}}
+                            </div>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="col-span-3 min-w-0">
+                            {{if .Email}}
+                                <p class="text-sm font-body text-surface-600 truncate" title="{{.Email}}">{{.Email}}</p>
+                            {{else}}
+                                <p class="text-xs font-body text-surface-300 italic">No email</p>
+                            {{end}}
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="col-span-3 flex items-center justify-start md:justify-end gap-1">
+
+                            <!-- View -->
+                            <a href="/supporters/{{.SupporterID}}"
+                               class="w-7 h-7 rounded-lg flex items-center justify-center text-surface-400 hover:text-violet-500 hover:bg-violet-50 transition-colors"
+                               title="View">
+                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                </svg>
+                            </a>
+
+                            <!-- Edit -->
+                            <a href="/supporters/{{.SupporterID}}/edit"
+                               class="w-7 h-7 rounded-lg flex items-center justify-center text-surface-400 hover:text-brand-500 hover:bg-brand-50 transition-colors"
+                               title="Edit">
+                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                </svg>
+                            </a>
+
+                            <!-- Set Password -->
+                            <a href="/supporters/{{.SupporterID}}/set-password"
+                               class="w-7 h-7 rounded-lg flex items-center justify-center text-surface-400 hover:text-emerald-500 hover:bg-emerald-50 transition-colors"
+                               title="Set Password">
+                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
+                                </svg>
+                            </a>
+
+                            <!-- Delete -->
+                            <form method="POST" action="/supporters/{{.SupporterID}}/delete"
+                                  onsubmit="return confirm('Delete {{.FirstName}} {{.LastName}}?')">
+                                <button type="submit"
+                                        class="w-7 h-7 rounded-lg flex items-center justify-center text-surface-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+                                        title="Delete">
+                                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                    </svg>
+                                </button>
+                            </form>
+
+                        </div>
+
+                    </div>
+                {{end}}
+
+                {{if not .Supporters}}
+                    <div class="px-6 py-16 text-center">
+                        <div class="w-12 h-12 rounded-xl bg-violet-50 flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-6 h-6 text-violet-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.5l1.318-1.182a4.5 4.5 0 016.364 6.364L12 20.364l-7.682-7.682a4.5 4.5 0 010-6.364z"/>
+                            </svg>
+                        </div>
+                        <p class="text-sm font-display font-semibold text-surface-500">No supporters yet</p>
+                        <p class="text-xs text-surface-400 font-body mt-1">Add your first supporter to get started.</p>
+                        <a href="/supporters/create"
+                           class="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-lg bg-violet-500 hover:bg-violet-600 text-white text-xs font-display font-semibold transition-colors">
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                            </svg>
+                            Add Supporter
+                        </a>
+                    </div>
+                {{end}}
+            </div>
+
+            <!-- Pagination -->
+            {{if gt .TotalPages 1}}
+                <div class="flex items-center justify-between px-6 py-4 border-t border-surface-100 bg-surface-50">
+                    <p class="text-xs text-surface-400 font-body">
+                        Page <span class="font-semibold text-surface-700">{{.CurrentPage}}</span>
+                        of <span class="font-semibold text-surface-700">{{.TotalPages}}</span>
+                        · {{.TotalSupporters}} total
+                    </p>
+                    <div class="flex items-center gap-1">
+                        {{if gt .CurrentPage 1}}
+                            <a href="/supporters?page={{.PrevPage}}"
+                               class="w-8 h-8 rounded-lg flex items-center justify-center text-surface-400 hover:bg-surface-200 hover:text-surface-700 transition-colors">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+                                </svg>
+                            </a>
+                        {{end}}
+                        {{range nearbyPages .CurrentPage .TotalPages}}
+                            <a href="/supporters?page={{.}}"
+                               class="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-display font-semibold transition-colors
+                               {{if eq . $.CurrentPage}}bg-violet-500 text-white{{else}}text-surface-500 hover:bg-surface-200{{end}}">
+                                {{.}}
+                            </a>
+                        {{end}}
+                        {{if lt .CurrentPage .TotalPages}}
+                            <a href="/supporters?page={{.NextPage}}"
+                               class="w-8 h-8 rounded-lg flex items-center justify-center text-surface-400 hover:bg-surface-200 hover:text-surface-700 transition-colors">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                                </svg>
+                            </a>
+                        {{end}}
+                    </div>
+                </div>
+            {{end}}
+
+        </div>
+
+    </div>
+
+{{end}}

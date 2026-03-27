@@ -1,0 +1,109 @@
+{{define "content"}}
+    <div class="max-w-2xl mx-auto space-y-6">
+
+        <div class="flex items-center gap-4">
+            <a href="/settings/products" class="w-8 h-8 rounded-lg flex items-center justify-center text-surface-400 hover:bg-surface-200 transition-colors">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+            </a>
+            <div>
+                <h1 class="font-display text-2xl font-bold text-surface-900 tracking-tight">Add Product</h1>
+                <p class="text-sm text-surface-400 font-body mt-0.5">Create a new product in a stall</p>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-surface-200 shadow-sm overflow-hidden">
+            <div class="px-6 py-4 border-b border-surface-100 flex items-center gap-3">
+                <div class="w-7 h-7 rounded-lg bg-brand-100 flex items-center justify-center">
+                    <svg class="w-3.5 h-3.5 text-brand-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10"/></svg>
+                </div>
+                <h2 class="font-display font-bold text-sm text-surface-800">Product Details</h2>
+            </div>
+
+            <form method="POST" action="/settings/products/create" class="px-6 py-6 space-y-5">
+
+                <!-- Name -->
+                <div class="space-y-1.5">
+                    <label class="text-xs font-display font-semibold uppercase tracking-wider text-surface-500">
+                        Product Name <span class="text-red-400">*</span>
+                    </label>
+                    <input type="text" name="name" placeholder="e.g. Wireless Mouse" required
+                           class="w-full px-3 py-2.5 text-sm font-body bg-surface-50 border border-surface-200 rounded-lg text-surface-800 placeholder-surface-400 focus:outline-none focus:ring-2 focus:ring-brand-400 focus:border-transparent transition"/>
+                </div>
+
+                <!-- Stall -->
+                <div class="space-y-1.5">
+                    <label class="text-xs font-display font-semibold uppercase tracking-wider text-surface-500">
+                        Stall <span class="text-red-400">*</span>
+                    </label>
+                    <select name="stall_id" required
+                            class="w-full px-3 py-2.5 text-sm font-body bg-surface-50 border border-surface-200 rounded-lg text-surface-800 focus:outline-none focus:ring-2 focus:ring-brand-400 focus:border-transparent transition">
+                        <option value="">Select a stall…</option>
+                        {{range .Stalls}}
+                            <option value="{{.StallID}}">{{.Name}} (#{{.StallID}})</option>
+                        {{end}}
+                    </select>
+                </div>
+
+                <!-- Price + Stock -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-display font-semibold uppercase tracking-wider text-surface-500">
+                            Price <span class="text-red-400">*</span>
+                        </label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-surface-400 select-none">﷼</span>
+                            <input type="number" name="price" placeholder="0" min="0" step="1000" required
+                                   class="w-full pl-7 pr-3 py-2.5 text-sm font-body bg-surface-50 border border-surface-200 rounded-lg text-surface-800 placeholder-surface-400 focus:outline-none focus:ring-2 focus:ring-brand-400 focus:border-transparent transition"/>
+                        </div>
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-display font-semibold uppercase tracking-wider text-surface-500">
+                            Stock <span class="text-red-400">*</span>
+                        </label>
+                        <input type="number" name="stock" placeholder="0" min="0" required
+                               class="w-full px-3 py-2.5 text-sm font-body bg-surface-50 border border-surface-200 rounded-lg text-surface-800 placeholder-surface-400 focus:outline-none focus:ring-2 focus:ring-brand-400 focus:border-transparent transition"/>
+                    </div>
+                </div>
+
+                <!-- Status -->
+                <div class="space-y-1.5">
+                    <label class="text-xs font-display font-semibold uppercase tracking-wider text-surface-500">
+                        Status <span class="text-red-400">*</span>
+                    </label>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        <label class="flex items-center gap-2 px-3 py-2.5 rounded-lg border border-surface-200 cursor-pointer hover:border-brand-300 hover:bg-brand-50 transition-colors has-[:checked]:border-brand-400 has-[:checked]:bg-brand-50">
+                            <input type="radio" name="status" value="active" checked class="accent-brand-500"/>
+                            <span class="text-xs font-display font-semibold text-surface-700">Active</span>
+                        </label>
+                        <label class="flex items-center gap-2 px-3 py-2.5 rounded-lg border border-surface-200 cursor-pointer hover:border-brand-300 hover:bg-brand-50 transition-colors has-[:checked]:border-brand-400 has-[:checked]:bg-brand-50">
+                            <input type="radio" name="status" value="inactive" class="accent-brand-500"/>
+                            <span class="text-xs font-display font-semibold text-surface-700">Inactive</span>
+                        </label>
+                        <label class="flex items-center gap-2 px-3 py-2.5 rounded-lg border border-surface-200 cursor-pointer hover:border-brand-300 hover:bg-brand-50 transition-colors has-[:checked]:border-brand-400 has-[:checked]:bg-brand-50">
+                            <input type="radio" name="status" value="out_of_stock" class="accent-brand-500"/>
+                            <span class="text-xs font-display font-semibold text-surface-700">Out of Stock</span>
+                        </label>
+                        <label class="flex items-center gap-2 px-3 py-2.5 rounded-lg border border-surface-200 cursor-pointer hover:border-brand-300 hover:bg-brand-50 transition-colors has-[:checked]:border-brand-400 has-[:checked]:bg-brand-50">
+                            <input type="radio" name="status" value="locked" class="accent-brand-500"/>
+                            <span class="text-xs font-display font-semibold text-surface-700">Locked</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="border-t border-surface-100"></div>
+
+                <div class="flex items-center justify-between">
+                    <a href="/settings/products" class="px-4 py-2.5 rounded-lg border border-surface-200 text-sm font-display font-semibold text-surface-600 hover:bg-surface-50 transition-colors">
+                        Cancel
+                    </a>
+                    <button type="submit" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-brand-500 hover:bg-brand-600 text-white text-sm font-display font-semibold shadow-sm transition-all">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                        Create Product
+                    </button>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+{{end}}

@@ -1,0 +1,35 @@
+{{define "portal_content"}}
+<div class="max-w-md mx-auto space-y-6">
+    <div class="text-center">
+        <div class="w-16 h-16 mx-auto rounded-2xl bg-emerald-100 flex items-center justify-center mb-4">
+            <svg class="w-8 h-8 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m-1 4h1m-1 -8H5m0 0v8m0 -8h14l-5 5"/>
+            </svg>
+        </div>
+        <h1 class="font-display text-2xl font-bold text-surface-900">Request Seller Stall</h1>
+        <p class="text-sm text-surface-500 font-body mt-1">Submit your stall name for admin approval to start selling</p>
+    </div>
+
+    <div class="bg-white rounded-xl border border-surface-200 shadow-sm p-8">
+        <form method="POST" action="/portal/request-stall" class="space-y-5">
+            <div>
+                <label class="block text-sm font-medium text-surface-700 mb-2 font-display">Stall Name</label>
+                <input type="text" name="stall_name" placeholder="e.g. Tech Gadgets Hub" required maxlength="100" 
+                    class="w-full px-4 py-3 border border-surface-200 rounded-lg text-surface-800 font-body text-base focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition shadow-sm">
+            </div>
+            <button type="submit" 
+                class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-display font-semibold py-3 px-6 rounded-lg text-base transition-all shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                Submit Request
+            </button>
+        </form>
+
+        <div class="mt-6 pt-6 border-t border-surface-100">
+            <p class="text-xs text-surface-500 text-center font-body">Your request will be reviewed by admin. You can check status in "My Requests" or continue shopping.</p>
+        </div>
+    </div>
+
+    <div class="text-center">
+        <a href="/portal" class="text-sm font-medium text-emerald-600 hover:text-emerald-700 font-display">← Back to Dashboard</a>
+    </div>
+</div>
+{{end}}

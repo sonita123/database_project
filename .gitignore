@@ -1,0 +1,24 @@
+# Go binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Go test and build output
+*.test
+*.out
+
+# Node — never commit
+node_modules/
+
+# Generated CSS — rebuild on each machine, never commit
+web/static/css/app.css
+
+# Environment / secrets
+.env
+*.env
+
+# OS files
+.DS_Store
+Thumbs.db

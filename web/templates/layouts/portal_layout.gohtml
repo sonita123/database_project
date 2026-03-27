@@ -1,0 +1,184 @@
+{{define "portal_layout"}}
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <title>{{.Title}} — UniBazar</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/static/css/app.css">
+    </head>
+    <body class="bg-surface-50 min-h-screen font-body antialiased">
+
+    <!-- ── Top nav ───────────────────────────────────────────────── -->
+    <header class="bg-white border-b border-surface-200 sticky top-0 z-20">
+
+        <!-- Main nav bar -->
+        <div class="max-w-6xl mx-auto px-4 md:px-6 h-14 flex items-center justify-between gap-3">
+
+            <!-- Logo -->
+            {{if eq .Role "supporter"}}
+                <a href="/supporter/portal" class="flex items-center gap-2 shrink-0">
+                    <div class="w-7 h-7 rounded-lg bg-brand-500 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="white" viewBox="0 0 16 16">
+                            <path d="M2.97 1.35A1 1 0 0 1 3.73 1h8.54a1 1 0 0 1 .76.35l2.609 3.044A1.5 1.5 0 0 1 16 5.37v.255a2.375 2.375 0 0 1-4.25 1.458A2.37 2.37 0 0 1 9.875 8 2.37 2.37 0 0 1 8 7.083 2.37 2.37 0 0 1 6.125 8a2.37 2.37 0 0 1-1.875-.917A2.375 2.375 0 0 1 0 5.625V5.37a1.5 1.5 0 0 1 .361-.976zm1.78 4.275a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 1 0 2.75 0V5.37a.5.5 0 0 0-.12-.325L12.27 2H3.73L1.12 5.045A.5.5 0 0 0 1 5.37v.255a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0M1.5 8.5A.5.5 0 0 1 2 9v6h1v-5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v5h6V9a.5.5 0 0 1 1 0v6h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1V9a.5.5 0 0 1 .5-.5M4 15h3v-5H4zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1zm3 0h-2v3h2z"/>
+                        </svg>
+                    </div>
+                    <span class="font-display text-base font-extrabold text-surface-900 tracking-tight">UniBazar</span>
+                </a>
+            {{else}}
+                <a href="{{if .IsBuyer}}/portal{{else}}/seller/dashboard{{end}}" class="flex items-center gap-2 shrink-0">
+                    <div class="w-7 h-7 rounded-lg bg-brand-500 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="white" viewBox="0 0 16 16">
+                            <path d="M2.97 1.35A1 1 0 0 1 3.73 1h8.54a1 1 0 0 1 .76.35l2.609 3.044A1.5 1.5 0 0 1 16 5.37v.255a2.375 2.375 0 0 1-4.25 1.458A2.37 2.37 0 0 1 9.875 8 2.37 2.37 0 0 1 8 7.083 2.37 2.37 0 0 1 6.125 8a2.37 2.37 0 0 1-1.875-.917A2.375 2.375 0 0 1 0 5.625V5.37a1.5 1.5 0 0 1 .361-.976zm1.78 4.275a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 1 0 2.75 0V5.37a.5.5 0 0 0-.12-.325L12.27 2H3.73L1.12 5.045A.5.5 0 0 0 1 5.37v.255a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0M1.5 8.5A.5.5 0 0 1 2 9v6h1v-5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v5h6V9a.5.5 0 0 1 1 0v6h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1V9a.5.5 0 0 1 .5-.5M4 15h3v-5H4zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1zm3 0h-2v3h2z"/>
+                        </svg>
+                    </div>
+                    <span class="font-display text-base font-extrabold text-surface-900 tracking-tight">UniBazar</span>
+                </a>
+            {{end}}
+
+            <!-- Desktop nav -->
+            <nav class="hidden md:flex items-center gap-0.5 flex-1 ml-2">
+                {{if eq .Role "user"}}
+                    {{if .IsBuyer}}
+                        <a href="/portal"               class="nav-link">Dashboard</a>
+                        <a href="/portal/shop"          class="nav-link">Shop</a>
+                        <a href="/portal/orders"        class="nav-link">My Orders</a>
+                        <a href="/portal/reviews"       class="nav-link">Reviews</a>
+                        <a href="/portal/become-seller" class="nav-link">Sell</a>
+                        {{if eq .user.userType "regular"}}
+                            <a href="/portal/request-vip"   class="nav-link">VIP</a>
+                        {{end}}
+                        {{else}}
+                        <a href="/seller/dashboard"    class="nav-link">My Stalls</a>
+                        <a href="/portal/stall/create" class="nav-link">Open Stall</a>
+                        <a href="/seller/reviews"      class="nav-link">Reviews</a>
+                        <a href="/portal/shop"         class="nav-link">My Listings</a>
+                    {{end}}
+                {{end}}
+                {{if eq .Role "supporter"}}
+                    <a href="/supporter/portal"          class="nav-link">Dashboard</a>
+                    <a href="/supporter/portal/orders"   class="nav-link">Orders</a>
+                    <a href="/supporter/portal/requests" class="nav-link">Requests</a>
+                    <a href="/supporter/portal/stalls"   class="nav-link">Stalls</a>
+                {{end}}
+            </nav>
+
+            <!-- Right side -->
+            <div class="flex items-center gap-1.5">
+
+                <!-- Cart (buyers only) -->
+                {{if and (eq .Role "user") .IsBuyer}}
+                    <a href="/portal/cart"
+                       class="relative w-9 h-9 rounded-lg flex items-center justify-center text-surface-500 hover:bg-surface-100 transition-colors">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-1.5 6h11"/>
+                        </svg>
+                        {{if .CartCount}}
+                            <span class="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-brand-500 text-white text-[10px] font-display font-bold flex items-center justify-center">
+                    {{.CartCount}}
+                </span>
+                        {{end}}
+                    </a>
+                {{end}}
+
+                <!-- Sign out (desktop only) -->
+                <a href="/logout"
+                   class="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-surface-200 text-xs font-display font-semibold text-surface-600 hover:bg-surface-50 transition-colors">
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                    </svg>
+                    Sign Out
+                </a>
+
+                <!-- Hamburger (mobile only) -->
+                <button id="menu-btn"
+                        class="md:hidden w-9 h-9 rounded-lg flex items-center justify-center text-surface-500 hover:bg-surface-100 transition-colors"
+                        onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+
+            </div>
+        </div>
+        <!-- /main nav bar -->
+
+        <!-- Mobile menu dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-surface-100 bg-white">
+            <div class="max-w-6xl mx-auto px-4 py-3 flex flex-col gap-1">
+
+                {{if eq .Role "user"}}
+                    {{if .IsBuyer}}
+                        <a href="/portal"               class="mobile-link">Dashboard</a>
+                        <a href="/portal/shop"          class="mobile-link">Shop</a>
+                        <a href="/portal/orders"        class="mobile-link">My Orders</a>
+                        {{if eq .user.userType "regular"}}
+                            <a href="/portal/request-vip"   class="nav-link">VIP</a>
+                        {{end}}
+                        <a href="/portal/reviews"       class="mobile-link">Reviews</a>
+                        <a href="/portal/become-seller" class="mobile-link">Become a Seller</a>
+
+                    {{else}}
+                        <a href="/seller/dashboard"    class="mobile-link">My Stalls</a>
+                        <a href="/portal/stall/create" class="mobile-link">Open Stall</a>
+                        <a href="/seller/reviews"      class="mobile-link">Reviews</a>
+                        <a href="/portal/shop"         class="mobile-link">My Listings</a>
+                    {{end}}
+                {{end}}
+
+                {{if eq .Role "supporter"}}
+                    <a href="/supporter/portal"          class="mobile-link">Dashboard</a>
+                    <a href="/supporter/portal/orders"   class="mobile-link">Orders</a>
+                    <a href="/supporter/portal/requests" class="mobile-link">Requests</a>
+                    <a href="/supporter/portal/stalls"   class="mobile-link">Stalls</a>
+                {{end}}
+
+                <div class="border-t border-surface-100 mt-1 pt-2">
+                    <a href="/logout" class="mobile-link text-red-500">Sign Out</a>
+                </div>
+
+            </div>
+        </div>
+        <!-- /mobile menu -->
+
+    </header>
+
+    <style>
+        .nav-link {
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #a8a29e;
+            transition: all 0.15s;
+            font-family: 'Syne', sans-serif;
+            white-space: nowrap;
+        }
+        .nav-link:hover {
+            background: #f5f5f4;
+            color: #1c1917;
+        }
+        .mobile-link {
+            display: block;
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #44403c;
+            font-family: 'Syne', sans-serif;
+            transition: background 0.15s;
+        }
+        .mobile-link:hover {
+            background: #f5f5f4;
+        }
+    </style>
+
+    <!-- Page content -->
+    <main class="max-w-6xl mx-auto px-4 md:px-6 py-6 md:py-8">
+        {{block "portal_content" .}}{{end}}
+    </main>
+
+    </body>
+    </html>
+{{end}}

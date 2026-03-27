@@ -1,0 +1,85 @@
+{{define "portal_content"}}
+
+    <div class="max-w-2xl mx-auto space-y-6">
+
+        <div class="flex items-center gap-3">
+            <a href="/portal/shop" class="w-8 h-8 rounded-lg flex items-center justify-center text-surface-400 hover:bg-surface-200 transition-colors">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+            </a>
+            <div>
+                <h1 class="font-display text-2xl font-bold text-surface-900 tracking-tight">My Cart</h1>
+                <p class="text-sm text-surface-400 font-body mt-0.5">{{len .Items}} item(s)</p>
+            </div>
+        </div>
+
+        {{if not .Items}}
+            <div class="bg-white rounded-xl border border-surface-200 py-16 text-center space-y-3">
+                <svg class="w-10 h-10 text-surface-300 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-1.5 6h11"/>
+                </svg>
+                <p class="text-sm text-surface-400 font-body">Your cart is empty</p>
+                <a href="/portal/shop" class="inline-block px-4 py-2 rounded-lg bg-brand-500 hover:bg-brand-600 text-white text-sm font-display font-semibold transition-colors">
+                    Browse Products
+                </a>
+            </div>
+        {{else}}
+
+            <div class="bg-white rounded-xl border border-surface-200 shadow-sm overflow-hidden">
+                <ul class="divide-y divide-surface-100">
+                    {{range .Items}}
+                        <li class="flex items-center gap-4 px-6 py-4">
+                            <div class="w-10 h-10 rounded-lg bg-surface-100 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5 text-surface-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10"/>
+                                </svg>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-display font-semibold text-surface-900 truncate">{{.ProductName}}</p>
+                                <p class="text-xs text-surface-400 font-body mt-0.5">{{printf "%.0f" .ProductPrice}} each</p>
+                            </div>
+                            <!-- Update qty -->
+                            <form method="POST" action="/portal/cart/update" class="flex items-center gap-2">
+                                <input type="hidden" name="cart_item_id" value="{{.CartItemID}}">
+                                <input type="number" name="quantity" value="{{.Quantity}}" min="1"
+                                       class="w-16 px-2 py-1.5 text-sm font-body bg-surface-50 border border-surface-200 rounded-lg text-center focus:outline-none focus:ring-2 focus:ring-brand-400 transition"/>
+                                <button type="submit" class="text-xs font-display font-semibold text-brand-500 hover:text-brand-600 transition-colors">Update</button>
+                            </form>
+                            <!-- Subtotal -->
+                            <span class="text-sm font-display font-bold text-surface-900 shrink-0 w-20 text-right">
+                    {{printf "%.0f" (mul .ProductPrice .Quantity)}}
+                </span>
+                            <!-- Remove -->
+                            <form method="POST" action="portal/cart/remove">
+                                <input type="hidden" name="cart_item_id" value="{{.CartItemID}}">
+                                <button type="submit" class="w-7 h-7 rounded-lg flex items-center justify-center text-surface-400 hover:bg-red-50 hover:text-red-500 transition-colors">
+                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                                    </svg>
+                                </button>
+                            </form>
+                        </li>
+                    {{end}}
+                </ul>
+
+                <!-- Total + checkout -->
+                <div class="px-6 py-4 border-t border-surface-100 bg-surface-50 flex items-center justify-between gap-4">
+                    <div>
+                        <p class="text-xs text-surface-400 font-body">Total</p>
+                        <p class="text-xl font-display font-extrabold text-surface-900 mt-0.5">{{printf "%.0f" .Total}}</p>
+                    </div>
+                    <form method="POST" action="/portal/checkout">
+                        <button type="submit"
+                                class="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-brand-500 hover:bg-brand-600 text-white text-sm font-display font-bold shadow-sm transition-all">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Place Order
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+        {{end}}
+    </div>
+
+{{end}}

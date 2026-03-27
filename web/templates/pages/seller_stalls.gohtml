@@ -1,0 +1,46 @@
+{{define "portal_content"}}
+
+<div class="max-w-2xl mx-auto space-y-6">
+
+    <div class="flex items-center gap-3">
+        <a href="/seller/portal" class="w-8 h-8 rounded-lg flex items-center justify-center text-surface-400 hover:bg-surface-200">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+        </a>
+        <h1 class="font-display text-2xl font-bold text-surface-900">My Stalls</h1>
+    </div>
+
+    {{if .Stalls}}
+    <div class="bg-white rounded-xl border border-surface-200 shadow-sm overflow-hidden">
+        <ul class="divide-y divide-surface-100">
+            {{range .Stalls}}
+            <li class="px-6 py-4 flex items-center justify-between">
+                <div>
+                    <h3 class="font-semibold text-lg">{{.Name}}</h3>
+                    <p class="text-sm text-surface-500">#{{.StallID}} • {{.Status | title}}</p>
+                </div>
+                <a href="/seller/products/add?stall={{.StallID}}" class="text-sm font-semibold text-emerald-600 hover:text-emerald-700">
+                    Manage Products →
+                </a>
+            </li>
+            {{end}}
+        </ul>
+    </div>
+    {{else}}
+    <div class="bg-white rounded-xl border border-surface-200 p-12 text-center space-y-4">
+        <svg class="w-12 h-12 text-surface-300 mx-auto" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m-1 4h1m-1 -8H5m0 0v8m0 -8h14l-5 5"/>
+        </svg>
+        <h3 class="font-semibold text-lg text-surface-900">No stalls yet</h3>
+        <p class="text-sm text-surface-500">Request your first stall to start selling</p>
+        <form method="POST" class="max-w-sm mx-auto space-y-3">
+            <input type="text" name="stall_name" placeholder="e.g. My Electronics Stall" required class="w-full px-4 py-3 border border-surface-200 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500">
+            <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-3 rounded-lg font-semibold text-sm transition">
+                Request Stall
+            </button>
+        </form>
+    </div>
+    {{end}}
+
+</div>
+
+{{end}}
