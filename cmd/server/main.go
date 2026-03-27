@@ -3,15 +3,16 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 	"unibazar/project/internal/db"
 	"unibazar/project/internal/handlers"
 	"unibazar/project/internal/router"
 )
 
 func main() {
-	//cwd, _ := os.Getwd()
+	cwd, _ := os.Getwd()
 	//fmt.Println("Working directory:", cwd)
-	handlers.LoadTemplates("C:/Users/Mahdi Hujat/Desktop/unibazar-go-sql-server-project-main")
+	handlers.LoadTemplates(cwd)
 	err := db.Connect()
 	if err != nil {
 		log.Fatal("Database connection failed:", err)
